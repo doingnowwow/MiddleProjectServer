@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="bookInfo">
+
+    
+    <!--2. 예약하기 -->
+    <insert id="insertBooking" parameterClass="BookingInfoVO">
+		INSERT INTO BOOKING_INFO (
+				HOTEL_NO,
+		        BOOK_NO,
+		        BOOKING_DOGNUM,
+		        BOOKING_REQUEST)
+		VALUES (#hotel_no#
+				, #book_no#
+				, #booking_dognum#
+				, #booking_request#)
+	</insert>
+	
+
+</sqlMap>			

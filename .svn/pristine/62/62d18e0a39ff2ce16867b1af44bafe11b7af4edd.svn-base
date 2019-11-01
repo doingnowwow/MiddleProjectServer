@@ -1,0 +1,127 @@
+package kr.or.ddit.dao.cart2;
+
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import kr.or.ddit.util.SqlMapClientFactory;
+import kr.or.ddit.vo.CartVO;
+import kr.or.ddit.vo.ProdVO;
+
+public class Cart2DaoImpl implements Cart2Dao {
+	
+	private SqlMapClient smc; // 
+
+	public static Cart2Dao dao;
+	
+	private Cart2DaoImpl() { 
+		smc = SqlMapClientFactory.getInstance();
+	}
+
+	// 객체 생성 및 제공
+	public static Cart2Dao getInstance() {
+		if (dao == null) {
+			dao = new Cart2DaoImpl();
+		}
+		return dao;
+	}
+
+/*	@Override
+	public int updateCart(ProdVO vo) throws RemoteException {
+		int cnt = 0;
+		
+		try {
+			cnt = smc.update("cart2.updateCart", vo);
+			
+		} catch (SQLException e) {
+			cnt = 0;
+			e.printStackTrace();
+		}
+		
+		return cnt;
+	
+	}   -- 보류 --*/
+
+	@Override
+	public int deleteCart(CartVO vo) throws RemoteException {
+		  int cnt = 0;
+
+	      try {
+	         cnt = smc.delete("cart2.deleteCart",vo);
+	      } catch (SQLException e) {
+	         e.printStackTrace();
+	      }
+	      
+	      return cnt;
+	   }
+
+	@Override
+	public List<CartVO> getAllList(CartVO vo) throws RemoteException {
+		ArrayList<CartVO> cartList = new ArrayList<CartVO>();
+		
+		try {
+			cartList = (ArrayList<CartVO>) smc.queryForList("cart2.getAllList", vo);
+		} catch (SQLException e) {
+			System.out.println("에러");
+			e.printStackTrace();
+		}
+		return cartList;
+	}
+
+	@Override
+	public int insertCart(CartVO vo) throws RemoteException {
+	int cnt = 0;
+		
+		try {
+			Object obj = smc.insert("cart2.insertCart", vo);
+			
+			if(obj == null) {
+				cnt = 1;
+			}else {
+				
+			}
+		}catch (SQLException e) {
+			cnt = 0;
+			e.printStackTrace();
+			
+		}
+		return cnt;
+	}
+
+/*	@Override
+	public List<ProdVO> readCart(ProdVO vo) throws RemoteException {
+		List<ProdVO> cartboard = new ArrayList<>();
+	      
+		try {
+			cartboard = smc.queryForList("cart2.selectCartread",vo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	      
+	      return cartboard;
+	}
+
+  -- 보류 --*/
+	
+/*	@Override
+	public boolean getCartNo(Integer prod_id) throws RemoteException {
+		boolean chk = false;
+		
+		try {
+			int cnt =(int)smc.queryForObject("cart2.getCart",prod_id);
+			
+			if(cnt > 0) {
+				chk =true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return chk;
+	}
+  이건 무슨ㅇ다오징...	
+*/	
+	
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="shop">
+	
+		
+	
+	<select id="shopSellListAll" resultClass="sellVO">
+	
+	select
+	 a.prod_gu,
+	  a.prod_name,
+	   b.cart_qty,
+	    to_char((b.cart_qty*a.prod_cost),'L99,9999'),
+	    d.mem_id
+		from 
+		prod a , cart b, buy c, member d
+
+
+		
+		where a.prod_id = b.prod_id
+		and b.buy_no= c.buy_no
+		and c.mem_no = d.mem_no
+	
+	
+	
+	
+	</select>
+	
+	
+	
+	
+
+
+
+</sqlMap>			

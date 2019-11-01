@@ -1,0 +1,55 @@
+package kr.or.ddit.service.cart;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
+
+import kr.or.ddit.dao.cart.CartDaoImpl;
+import kr.or.ddit.vo.PointVO;
+import kr.or.ddit.vo.ShoppingVO;
+
+public class CartServiceImpl extends UnicastRemoteObject implements CartService {
+
+	CartDaoImpl dao;
+
+	public static CartServiceImpl service;
+
+	public CartServiceImpl() throws RemoteException {
+		super();
+		dao = CartDaoImpl.getInstance();
+
+	}
+
+	public static CartServiceImpl getInstance() throws RemoteException {
+		if (service == null) {
+			service = new CartServiceImpl();
+		}
+
+		return service;
+	}
+
+	@Override
+	public List<ShoppingVO> ListAll(ShoppingVO sv) throws RemoteException {
+
+		return dao.ListAll(sv);
+	}
+
+	@Override
+	public int insertCart(ShoppingVO sv) throws RemoteException {
+		// TODO Auto-generated method stub
+		return dao.insertCart(sv);
+	}
+
+	@Override
+	public int deleteCart(ShoppingVO sv) throws RemoteException {
+
+		return dao.deleteCart(sv);
+	}
+
+	@Override
+	public PointVO getPoint(PointVO pv) throws RemoteException {
+
+		return dao.getPoint(pv);
+	}
+
+}

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- namespace속성 : 아래에서 작성한 SQL을 호출할 때, 같이 사용된다.  -->
+
+<sqlMap namespace="prodTest">
+	
+	<!--  select연습  -->
+	
+	<select id="select" resultClass="prodVO">
+		select prod_id, prod_name, prod_cost,prod_info,prod_com_info,prod_img,prod_datil_img
+		from prod
+		where prod_id =#prod_id#
+	</select>
+	
+	<select id="getAllProd" resultClass="prodVO">
+	
+		select prod_id, prod_name, prod_sock, prod_cost, prod_gu, prod_info, prod_com_info,prod_img,prod_datil_img
+		  from PROD
+		 order by prod_id
+	</select>
+	
+	<insert id="insertProd" parameterClass="prodVO">
+	
+	INSERT INTO PROD(PROD_ID, PROD_GU, PROD_NAME, PROD_COST,  PROD_SOCK,prod_info, prod_com_info)
+    values ((select nvl(max(prod_id),0)+1 from prod), #prod_gu#, #prod_name#, #prod_cost#, #prod_sock#,#prod_info#, #prod_com_info#)
+	
+	</insert>
+	
+	<update id = "updateProd" parameterClass="prodVO">
+	update prod
+	  set  prod_gu = #prod_gu#
+	    ,prod_name = #prod_name#
+	    ,prod_cost = #prod_cost#
+	    ,prod_sock = #prod_sock#
+	  	,prod_info = #prod_info#
+	  	,prod_com_info = #prod_com_info#
+	   where prod_id = #prod_id#
+	    </update>
+	 
+	 <select id="getProdCnt" parameterClass = "int" resultClass="int">
+	
+		select count(*) cnt from dog_sale;
+
+    </select> 	
+    
+	<delete id="deleteProd" parameterClass="prodVO">
+		delete from prod
+		 where prod_id = #prod_id#
+	
+	</delete>
+     
+     
+     <select id="SearchProd" parameterClass="prodVO" resultClass="prodVO">
+		
+		select prod_name, prod_gu, prod_com_info from prod where 1=1
+		
+		<isNotEmpty property="prod_id">
+			and prod_id = #prod_id#		
+		</isNotEmpty>
+			<isNotEmpty property="prod_name">
+			and prod_name  like '%' || #prod_name# || '%'		
+		</isNotEmpty>
+			<isNotEmpty property="prod_gu">
+			and prod_gu = #prod_gu#		
+		</isNotEmpty>
+		<isNotEmpty property="prod_com_info">
+			and prod_com_info like '%' || #prod_com_info# || '%'
+		</isNotEmpty>
+	
+	</select>
+	    
+	
+</sqlMap>
+			
+
+
+
+
+

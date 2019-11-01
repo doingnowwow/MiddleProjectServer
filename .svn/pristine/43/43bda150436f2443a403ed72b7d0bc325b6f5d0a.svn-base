@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- namespace속성 : 아래에서 작성한 SQL을 호출할 때, 같이 사용된다.  -->
+<sqlMap namespace="dogsaleTest">
+	<!-- 
+		이 영역에 sql문에 맞는 태그를 사용하여, sql문을 작성한다. 
+		
+		사용할 수 있는 기본적인 태그들
+		
+		<select>~~~</select>
+		<insert>~~~</insert>
+		<update>~~~</update>
+		<delete>~~~</delete>
+		
+		위 태그에서 사용되는 속성들
+			1) id속성 : 해당 태그를 호출할 때, <sqlMap>태그의 namespace와 
+				              연결하여 사용하는 이름
+			2) parameterClass속성 : sql문에 사용될 데이터가 들어있는 객체를 지정한다. 
+								  (보통 vo클래스, 자바의 자료형 이름등이 사용된다.)
+								  (typeAlias로 지정한 alias명을 사용할 수 있다.)
+			3) resultClass속성 : select문을 실행한 결과를 담을 객체를 지정한다. 
+								  (보통 VO클래스, 자바의 자료형 이름등이 사용된다.) 
+	 -->
+	<!-- insert 연습  -->
+	<insert id="insertDogSale" parameterClass="dogSaleVo">
+	
+	INSERT INTO DOG_SALE(DOG_NO, COM_NO, DOG_GU, DOG_NAME, DOG_GENDER, DOG_SIZE, DOG_INTRO,
+						 DOG_BIR, DOG_PICTURE, CHKDOG_SALE, DOG_INFODETAIL)
+    values (#dog_no#, #com_no#, #dog_gu#, #dog_name#, #dog_gender#, #dog_size#, #dog_intro#
+    		,#dog_bir#, #dog_picture#, #chkdog_sale#, #dog_infodetail#)
+	</insert>
+
+	<!-- update 연습 -->
+	<update id = "updateDogSale" parameterClass="dogSaleVo">
+	update dog_sale
+	set dog_no = #dog_no#
+	    ,dog_gu = #dog_gu#
+	    ,dog_name = #dog_name#
+	    ,dog_gender = #dog_gender#
+	    ,dog_size = #dog_size#
+	    ,dog_intro = #dog_intro#
+	    ,dog_bir = #dog_bir#
+	    ,dog_picture = #dog_picture#
+	    ,chkdog_sale = #chkdog_sale#
+	    where com_no = #com_no#
+	    
+	    </update>
+	
+	
+	<!--  select연습  -->
+	<select id="getAllDogSale" resultClass="dogSaleVo">	
+	select dog_no, com_no, dog_gu, dog_name, dog_gender, dog_size, dog_intro, dog_bir, chkdog_sale, res_date, good_cnt, dog_picture, dog_infodetail from dog_sale
+	</select>
+	
+	
+<!-- 	<select id="getDogSaleCnt" parameterClass = "int"> -->
+	
+<!-- 		select count(*) cnt from dog_sale where com_no = #aaaaaa# -->
+
+<!--     </select> 	 -->
+    
+    <delete id = "getdeleteDogSale" parameterClass="dogSaleVo">
+    
+    	delete from dog_sale where com_no = #com_no#
+    	
+    </delete>
+	
+	<select id="getSearchDogSale" parameterClass="dogSaleVo" resultClass="dogSaleVo">
+		
+		select from dog_sale where 1=1
+		
+		<isNotEmpty property="com_no">
+			and com_no = #com_no#		
+		</isNotEmpty>
+		<isNotEmpty property="dog_name">
+			and dog_name = #dog_name#		
+		</isNotEmpty>
+	
+	</select>
+	
+	
+	<select id="getDogSaleSearchList" parameterClass="dogSaleVo" resultClass="dogSaleVo">
+	
+			
+			SELECT	a.dog_no,
+				    a.com_no,
+				    b.hotel_name,
+				    a.dog_gu,
+				    a.dog_name,
+				    a.dog_gender,
+				    a.dog_size,
+				    a.dog_intro,
+				    a.dog_bir,
+				    a.chkdog_sale,
+				    a.res_date,
+				    a.good_cnt,
+				    a.dog_picture,
+				    a.dog_infodetail
+
+		from dog_sale a
+		left join hotel b on a.com_no = b.com_no
+		where 1=1
+			AND HOTEL_NAME LIKE '%'||#hotel_name#||'%'
+			AND DOG_GU LIKE  '%'||#dog_gu#||'%'
+	<isNotEmpty property="dog_gender">
+		<isNotEqual property="dog_gender" compareValue="-전체-">
+				AND DOG_GENDER = #dog_gender#
+		</isNotEqual>	
+	</isNotEmpty>
+	<isNotEmpty property="dog_size">
+		<isNotEqual property="dog_size" compareValue="-전체-">
+				AND DOG_SIZE = #dog_size#
+		</isNotEqual>
+	</isNotEmpty>
+	ORDER BY A.DOG_NO DESC	
+</select>
+	
+</sqlMap>
+			
+
+
+
+
+

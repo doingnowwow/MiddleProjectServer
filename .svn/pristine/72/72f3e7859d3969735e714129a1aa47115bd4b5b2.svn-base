@@ -1,0 +1,62 @@
+package kr.or.ddit.service.dogBoard;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
+
+import kr.or.ddit.dao.dogBoard.DogBoardDao;
+import kr.or.ddit.dao.dogBoard.DogBoardDaoImpl;
+import kr.or.ddit.vo.DogBoardVO;
+
+public class DogBoardServiceImpl extends UnicastRemoteObject implements DogBoardService{
+	
+private static DogBoardServiceImpl dogBoardService;
+	
+	private DogBoardDao dogBoardDao;
+	
+	private DogBoardServiceImpl() throws RemoteException{
+		dogBoardDao = DogBoardDaoImpl.getInstance();
+	}
+	
+	public static DogBoardServiceImpl getInstance() throws RemoteException {
+		if(dogBoardService == null) {
+			dogBoardService = new DogBoardServiceImpl();
+			
+		}
+		return dogBoardService;
+	}
+
+	@Override
+	public List<DogBoardVO> getAllDogBoard() throws RemoteException {
+		return dogBoardDao.getAllDogBoard();
+	}
+
+	@Override
+	public int insertDogBoard(DogBoardVO dbv) throws RemoteException {
+		return dogBoardDao.insertDogBoard(dbv);
+	}
+
+	@Override
+	public List<DogBoardVO> searchDogBoard(String content) throws RemoteException {
+		return dogBoardDao.searchDogBoard(content);
+	}
+
+	@Override
+	public int updateDogBoard(DogBoardVO dbv) throws RemoteException {
+		return dogBoardDao.updateDogBoard(dbv);
+	}
+
+	@Override
+	public int deleteDogBoard(DogBoardVO dbv) throws RemoteException {
+		return dogBoardDao.deleteDogBoard(dbv);
+	}
+
+	@Override
+	public List<DogBoardVO> getMyBoardList() throws RemoteException {
+		return dogBoardDao.getMyBoardList();
+	}
+	
+	
+	
+
+}

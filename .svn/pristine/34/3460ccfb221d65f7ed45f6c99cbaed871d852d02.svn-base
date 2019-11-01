@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="adver">
+	
+	<!--1.광고 추가 -->
+	<insert id="insertAd" parameterClass="adVO">
+		insert into advertisement (ad_no, ad_name, ad_content)
+  		  values ((select nvl(max(ad_no),0)+1 from advertisement), #ad_name# , #ad_content#)
+	</insert>
+	
+	<!--2.광고 수정 -->
+	<update id="modifyAd" parameterClass="adVO">
+		update  advertisement
+   		   set ad_name = #ad_name# ,
+               ad_content = #ad_content#
+         where ad_no = #ad_no#
+	</update>
+	
+	<!--3.광고 삭제 -->
+	<delete id="deleteAd" parameterClass="adVO">
+		delete from advertisement
+ 		 where ad_no = #ad_no#
+	</delete>
+	
+	<!--4.광고모두보기 -->
+	<select id="showAllAd" resultClass="adVO">
+		select ad_no, ad_name, ad_content
+  		  from advertisement
+	</select>
+	
+	<!--5.광고선택조회 -->
+	<select id="selectAd" parameterClass="adVO" resultClass="adVO">
+		select ad_no, ad_name, ad_content
+ 		  from advertisement
+		 where ad_no = 1
+	</select>
+	
+	
+
+
+
+</sqlMap>			

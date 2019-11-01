@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="point">
+
+    
+    <!--1. 호텔 결제를 통한 예약하기 -->
+    <insert id="insertPointReserv" parameterClass="PointVO">
+    	
+		INSERT INTO POINT
+		       (POINT_NO,
+		        MEM_NO,
+		        POINT_MONEY,
+		        POINT_USE,
+		        POINT_USE_DATE,
+		        POINT_SAVE_DATE,
+		        POINT_CONTENTS,
+		        POINT_MYPOINT)
+		VALUES ((SELECT NVL(MAX(POINT_NO)+1,0) FROM POINT)
+				, #mem_no#
+				, #point_money#
+				, #point_use#
+				, #use_date#
+				, #save_date#
+				, #point_contents#
+				, #point_mypoint#)
+	</insert>
+	
+	<select id="seachNowMileage" parameterClass="PointVO" resultClass="int">
+	    select POINT_MYPOINT
+	      FROM POINT
+	     WHERE MEM_NO = #mem_no#
+	       and point_no = (select nvl(max(point_no), 0)
+	                         from point 
+	                        where mem_no = #mem_no#)
+	</select>
+	
+	<select id="seachMem_noGetAll" parameterClass="int" resultClass="PointVO">
+			SELECT * 
+			  FROM POINT
+			 WHERE MEM_NO = #mem_no#
+	</select>
+	
+
+</sqlMap>			

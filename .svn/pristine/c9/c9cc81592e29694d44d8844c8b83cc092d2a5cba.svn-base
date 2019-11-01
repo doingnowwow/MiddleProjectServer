@@ -1,0 +1,57 @@
+package kr.or.ddit.dao.cart;
+
+import java.util.List;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+import com.ibatis.sqlmap.engine.builder.xml.SqlMapConfigParser;
+
+import kr.or.ddit.util.SqlMapClientFactory;
+import kr.or.ddit.vo.PointVO;
+import kr.or.ddit.vo.ShoppingVO;
+
+public class CartDaoImpl implements CartDao {
+
+	private SqlMapClient smc; 
+	
+	public static CartDaoImpl dao = new CartDaoImpl();
+	
+	private CartDaoImpl() {
+		smc = SqlMapClientFactory.getInstance();
+		
+	}
+	
+	public static CartDaoImpl getInstance() {
+		if(dao == null) {
+			dao = new CartDaoImpl();
+		}
+		
+		return dao;
+	}
+	
+	
+	
+	@Override
+	public List<ShoppingVO> ListAll(ShoppingVO sv) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int insertCart(ShoppingVO sv) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteCart(ShoppingVO sv) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public PointVO getPoint(PointVO pv) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

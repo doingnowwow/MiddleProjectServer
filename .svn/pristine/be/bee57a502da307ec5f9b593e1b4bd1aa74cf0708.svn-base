@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+ <sqlMap namespace="cart2">
+
+
+	
+<!-- 전체  출력 --> 
+	<select id="getAllList" resultClass="ProdVO">
+		select prod_id,prod_name,prod_info,prod_cost
+		  from prod
+		  order by prod_id
+	</select>
+	
+<!-- 게시글 확인창 --> 
+	<select id="selectCartread" resultClass="ProdVO" parameterClass="String">
+		select prod_id,prod_name,prod_info,prod_cost
+		  from prod
+		 where prod_id = #prod_id#
+	</select>
+	
+	
+<!--  게시글 수정 
+	<update id="updateCart" parameterClass="ProdVO">
+		UPDATE prod SET 
+               prod_info = #prod_info#,
+               bd_content = #bd_content#
+      	WHERE  mem_id=#mem_id# and bd_no=#bd_no# 
+    </update>  -->
+	
+	
+<!-- 게시글 존재여부 확인 -->
+	<select id="getCart" parameterClass="String" resultClass="ProdVO">
+		select * from prod where #prod_id# = #prod_id#
+	</select>
+	
+<!-- 카트삭제 삭제 -->
+   <update id="deleteCart" parameterClass="ProdVO">
+      DELETE FROM prod 
+        WHERE prod_id=#prod_id# and prod_name=#prod_name#
+    </update> 
+
+	
+</sqlMap>

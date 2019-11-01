@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+         PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+         "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+         
+<sqlMap namespace="comJoin" >
+	<select id="comSelectId" resultClass="comVO" parameterClass="comVO">
+		select com_id from com where com_id = #com_id#
+	</select>
+	
+	<select id="comSelectEmail" resultClass="comVO" parameterClass="comVO" >
+		select com_id from com where com_email = #com _email#
+	</select>
+
+	<insert id="insertMember" parameterClass="comVO">
+		insert into com (com_no, com_id, com_pw, com_name, com_addr1, com_addr2, com_tel, com_ceo, com_email)
+			values( #com_no#, #com_id#, #com_pw#, #com_name#, #com_addr1#, #com_addr2#, #com_tel#)
+	</insert>
+</sqlMap>             

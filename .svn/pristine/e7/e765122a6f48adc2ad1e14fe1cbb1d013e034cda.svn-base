@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="book">
+
+
+	<!--1.호텔 사용자 예약내역 전체 조회-->
+	<select id="getAllBook" resultClass="bookVO" parameterClass="bookVO">
+	 	    SELECT
+          a.book_no,
+          TO_CHAR(a.book_date, 'YYYY/MM/DD') AS book_date,
+          TO_DATE(book_checkin)+2 AS book_checkinB,
+          a.book_state,
+          a.book_check,
+          a.book_price,
+          a.mem_no,
+          a.book_dog_cnt,
+          a.book_person,
+          b.hotel_name,
+          a.hotel_no,
+          a.book_checkin,
+          a.book_checkout
+      FROM
+          book a left join hotel b on a.hotel_no = b.hotel_no
+      WHERE 1=1
+          AND a.use_yn = 'Y'
+        AND b.hotel_name LIKE '%'||#hotel_name#||'%'
+        <isNotEmpty property="dateGu">
+           <isEqual property="dateGu" compareValue="today">
+              AND TO_CHAR(book_date, 'YYYY/MM/DD') = TO_CHAR(SYSDATE, 'YYYY/MM/DD')
+           </isEqual>
+           <isEqual property="dateGu" compareValue="week">
+              AND a.book_date between sysdate-7 and sysdate
+           </isEqual>
+           <isEqual property="dateGu" compareValue="month">
+              AND a.book_date between sysdate-30 and sysdate
+           </isEqual>
+           <isEqual property="dateGu" compareValue="6month">
+              AND a.book_date between sysdate-180 and sysdate
+           </isEqual>
+        </isNotEmpty>
+        <isNotEmpty property="sDate">
+           AND to_date(a.book_date) between to_date(#sDate#) and to_date(#eDate#)
+        </isNotEmpty>
+   </select>
+    
+    <select id ="getIndexHotel" resultClass ="hotelVO" parameterClass = "BookVO">
+    
+    
+    </select>
+    
+    
+    
+    <!--2. 예약하기 -->
+    <insert id="insertBooking" parameterClass="bookVO">
+		INSERT INTO book (book_no, hotel_no, book_person, book_date, book_state, mem_no, book_check,book_dog_cnt
+									book_price, book_checkin, book_checkout)
+  		     VALUES((SELECT NVL(MAX(book_no)+1,0) FROM Book), #hotel_no#, #book_person#, #book_date#, #book_state#, #mem_no#, #book_check#,
+  		     		#book_dog_cnt#, #book_price#, #book_checkin#, #book_checkout#)   
+	</insert>
+	
+	<!--3.나의 예약내역 조회-->
+	<select id="selectMyBook" resultClass="bookVO" parameterClass="int">
+	 	SELECT  a.book_no, c.hotel_name, a.book_person, a.book_date, a.book_check
+	 			a.book_checkin, a.book_checkout, a.book_state, a.bookprice,a.book_dog_cnt
+		    FROM book a, member b, hotel c
+		    WHERE a.mem_no = b.mem_no
+		      AND a.hotel_no = c.hotel_no
+		      AND a.mem_no = #mem_no#
+	</select>
+	
+<!--4. 예약 삭제  테이블문제때문에 delete말고 update로 목록에서 삭제함--> 
+   <update id="deleteBooking" parameterClass="bookVO">
+       update book
+       set use_yn = 'N'
+       where book_no = #book_no#
+   <![CDATA[ and book_checkin < sysdate-4 ]]>
+    </update>
+   
+   
+     <!--5. 예약 수정
+     <update id="updateBooking" parameterClass="BookVO">
+    	update book
+    	set hotel_no = 3
+  		where book_no = 1;
+    </update>  -->
+	
+	
+	<!--6. 현재까지 저장된 마지막 호텔예약번호 가져오기 ==승재 -->
+	<select id="selectMyBookNum" resultClass="int">
+		SELECT NVL(MAX(BOOK_NO), 0)
+		  FROM BOOK;
+	</select>
+	
+	<!--7. 결제를 통한 예약 등록 (호텔번호 별도 입력)==승재 -->
+
+    <insert id="insertBookReserv" parameterClass="bookVO">
+		INSERT INTO BOOK(
+		                  BOOK_NO
+						, BOOK_DATE
+						, BOOK_STATE
+						, BOOK_CHECK
+						, BOOK_PRICE
+						, MEM_NO
+						, BOOK_DOG_CNT
+						, BOOK_PERSON
+						, HOTEL_NO
+						, BOOK_CHECKIN
+						, BOOK_CHECKOUT
+						, BOOK_OK_DATE
+		       VALUES( #book_no#, #book_date#, #book_state#, 
+		                #book_check#, #book_price#, #mem_no#, 
+		                #book_dog_cnt#, #book_person#, #hotel_no#, 
+		                #book_checkin#, #book_checkout#, #book_ok_date#);  
+	</insert>
+	
+</sqlMap>			

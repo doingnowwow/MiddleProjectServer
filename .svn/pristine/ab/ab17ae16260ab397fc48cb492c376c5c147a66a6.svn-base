@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+ <sqlMap namespace="cart2">
+
+	
+<!-- 전체  출력 --> 
+	<select id="getAllList" resultClass="CartVO" parameterClass="CartVO">
+		SELECT
+			'0' as chk,
+		    rownum as r_Num,
+		    decode(b.prod_gu, 'A1', '사료/먹이'
+		                    , 'B1', '생활용품'
+		                    , 'C1', '장난감'
+		                    , '기타') as prod_gu_nm,
+		    a.prod_id,
+		    a.cart_id,
+		    b.PROD_NAME,
+		    b.PROD_COST * a.cart_qty as PROD_total_COST,
+		    b.PROD_INFO,
+		    a.cart_qty,
+		    to_char(a.cart_no, 'yy-MM-dd') as cart_no,
+		    a.mem_no
+		FROM
+		    cart a left join prod b on  a.prod_id = b.prod_id
+		where 1=1
+		and a.mem_no = #mem_no#
+		order by cart_no desc
+		
+	</select>
+	
+<!-- 카트 확인 --> 
+
+	
+	
+<!-- 카트 존재여부 확인 -->
+
+<!-- 카트삭제 -->
+   <delete id="deleteCart" parameterClass="CartVO">
+       DELETE FROM cart
+        WHERE mem_no='1' 
+          and to_char(cart_no, 'yy-MM-dd')=#cart_no#
+          and prod_id= #prod_id#
+          and cart_qty= #cart_qty#
+    
+   </delete> 
+
+	
+</sqlMap>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+			
+<sqlMap namespace="dlike">
+<!-- 
+승재오빠 찜하기 만들떄 이거 사용하세염 -->
+<insert id="insertdlike">
+	INSERT INTO DLIKE (MEM_NO, DOG_NO, COM_NO, DLIKE_NO) 
+	VALUES (#MEM_NO#, #DOG_NO#, #COM_NO#, (select nvl(max(DLIKE_NO),0)+1 from DLIKE))
+	
+</insert>
+
+<!-- 찜 목록 회원별로 불러오기 -->
+<select id="dlikelist">
+ select a.dog_name , a.dog_gender, a.dog_gu, a.dog_picture
+   from dog_sale a, dlike b 
+   where a.dog_no = b.dog_no
+     and b.mem_no = #mem_no#
+
+</select>
+</sqlMap>

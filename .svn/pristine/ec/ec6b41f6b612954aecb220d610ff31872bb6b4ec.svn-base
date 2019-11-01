@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		
+<sqlMap namespace="ShopReview" >
+
+	<!-- 전체 리뷰 조회 -->
+		<select id="shopReviewAll" resultClass="shopreviewVO" >
+		
+			select * from SHOPREVIEW
+		</select>
+	
+
+	<!-- 내가 쓴 리뷰 조회 -->
+	<select id="selectMyReviewList" resultClass="shopreviewVO" >
+	select * from SHOPREVIEW  where re_writer like '%' || #re_writer#|| '%'
+	
+	</select>
+	
+	
+	<!--  리뷰작성하기 -->
+	<insert id = "insertShopReview"   parameterClass="shopreviewVO">
+		insert into SHOPREVIEW (re_no, re_writer, re_cont, re_star, re_date, mem_no)
+		values((select nvl(max(re_no),0)+1 from SHOPREVIEW), #re_writer#, #re_cont#, #re_star#, sysdate, 1)
+	</insert>
+	
+	<!--  리뷰작성하기 -->
+	<insert id = "insertShopReview2"   parameterClass="shopreviewVO">
+		insert into SHOPREVIEW (re_no, re_cont, re_star, re_date, mem_no)
+		values((select nvl(max(re_no),0)+1 from SHOPREVIEW),  #re_cont#, #re_star#, sysdate, #mem_no#)
+	</insert>
+	
+	
+	
+	<!-- 리뷰수정하기 -->
+		<update id = "updateShopReview" parameterClass="shopreviewVO">
+	
+		update SHOPREVIEW set
+		
+				re_writer = #re_writer#,
+				re_cont = #re_cont#,
+				re_star = #re_star#
+		where mem_no=#mem_no# and re_no=#re_no#		
+		
+	</update>
+	
+	<!-- 리뷰 삭제하기 -->
+	<delete id = "deleteShopReview" parameterClass="shopreviewVO">
+		delete SHOPREVIEW
+		where re_no=#re_no# and mem_no =#mem_no#
+		
+	</delete>
+	
+	<insert id="insertProdReview" parameterClass="shopreviewVO">
+		insert into SHOPREVIEW (prod_id, mem_no, prod_id, re_date, re_writer, re_cont)
+		  values ((select nvl(max(prod_id),0)+1 from shopreview), #mem_no#, #prod_id#, sysdate, #re_writer#, #re_cont#)
+	</insert>
+	
+	<insert id="insertProdReview2" parameterClass="shopreviewVO">
+		insert into SHOPREVIEW (prod_id, mem_no, prod_id, re_date, re_writer, re_cont)
+		  values ((select nvl(max(prod_id),0)+1 from shopreview), #mem_no#, #prod_id#, sysdate, #re_writer#, #re_cont#)
+	</insert>
+	
+	<select id="selectMyReviewDate" resultClass="shopreviewVO" parameterClass="shopreviewVO">
+		select to char(a.re_date, 'YYYY/MM/DD') as re_date, a.re_cont, b.prod_name
+		from SHOPREVIEW a,PROD b
+		where 1 =1
+		and a.prod_id = b.prod_id
+		and a.mem_no = #mem_no#
+	</select>
+	
+	<!-- prod상세페이지에서 댓글 조회 -->
+	<select id="selectProdReview" resultClass="shopreviewVO" parameterClass="shopreviewVO" >
+		select re_star, re_cont, re_writer, re_date 
+ 		  from shopreview a , prod b
+ 		 where b.prod_id = #prod_id#
+ 		   and a.mem_no = #mem_no#
+	</select>
+	
+</sqlMap>
+			

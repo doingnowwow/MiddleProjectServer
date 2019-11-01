@@ -1,0 +1,158 @@
+package kr.or.ddit.dao.shopReivew;
+
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import kr.or.ddit.util.SqlMapClientFactory;
+import kr.or.ddit.vo.ProdVO;
+import kr.or.ddit.vo.ShopReviewVO;
+
+public class ShopReviewDaoImpl implements ShopReviewDao {
+
+	private SqlMapClient smc; // xml연결위해만듬
+
+	public static ShopReviewDaoImpl sReviewdao = new ShopReviewDaoImpl();
+
+	private ShopReviewDaoImpl() {
+		smc = SqlMapClientFactory.getInstance();
+	}
+
+	public static ShopReviewDaoImpl getInstance() {
+		if (sReviewdao == null) {
+			sReviewdao = new ShopReviewDaoImpl();
+		}
+		return sReviewdao;
+	}
+
+	public static void main(String[] args) {
+
+	}
+
+	@Override // 전체리뷰조회
+	public List<ShopReviewVO> ShopReviewAll() {
+		ArrayList<ShopReviewVO> shopReviewList = null;
+
+		try {
+			shopReviewList = (ArrayList<ShopReviewVO>) smc.queryForList("ShopReview.shopReviewAll");
+
+		} catch (SQLException e) {
+			System.out.println("에러에러에러에러");
+			e.printStackTrace();
+		}
+		return shopReviewList;
+	}
+
+	@Override // 내가 쓴 리뷰 조회
+	public List<ShopReviewVO> selectMyShopReview(ShopReviewVO mv) {
+		ArrayList<ShopReviewVO> shopReviewList = null;
+
+		try {
+			shopReviewList =  (ArrayList<ShopReviewVO>) smc.queryForList("ShopReview.selectMyReviewList", mv);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return shopReviewList;
+	}
+
+	@Override // 리뷰작성
+	public int insertShopReveiw(ShopReviewVO vo) {
+		int cnt = 0;
+
+		try {
+			Object obj = smc.insert("ShopReview.insertShopReview", vo);
+			if (obj == null) {
+				cnt = 1;
+			} else {
+
+			}
+
+		} catch (SQLException e) {
+			cnt = 0;
+			e.printStackTrace();
+		}
+		return cnt;
+	}
+
+	@Override // 리뷰삭제
+	public int deleteShopReview(ShopReviewVO vo) {
+		int cnt = 0;
+
+		try {
+			cnt = smc.update("ShopReview.deleteShopReview", vo);
+		} catch (SQLException e) {
+			cnt = 0;
+			e.printStackTrace();
+		} finally {
+
+		}
+		return cnt;
+	}
+
+	@Override // 리뷰수정 (조건 : re_no,mem_no)
+	public int updateShopReview(ShopReviewVO vo) {
+		int cnt = 0;
+
+		try {
+			cnt = smc.update("ShopReview.updateShopReview", vo);
+
+		} catch (SQLException e) {
+			cnt = 0;
+			e.printStackTrace();
+		}
+
+		return cnt;
+	}
+
+	@Override
+	public List<ShopReviewVO> selectMyReviewDate(ShopReviewVO mv) throws RemoteException {
+		ArrayList<ShopReviewVO> dateList  = new ArrayList<>();
+		try {
+			dateList = (ArrayList<ShopReviewVO>) smc.queryForList("ShopReview.selcetMyReviewDate",mv);
+		}catch (SQLException e) {
+			dateList = null;
+			e.printStackTrace();
+		}
+		return dateList;
+	}
+
+	@Override
+	public List<ShopReviewVO> selectProdReview(ShopReviewVO prod_id) throws RemoteException {
+		ArrayList<ShopReviewVO> selectReview = new ArrayList<>();
+		
+		try {
+			selectReview = (ArrayList<ShopReviewVO>) smc.queryForList("ShopReview.selectProdReview", prod_id);
+		}catch (Exception e) {
+			System.out.println(" selectProdReview 에러");
+			e.printStackTrace();
+		}
+		return selectReview;
+	}
+
+	public int insertShopReveiw2(ShopReviewVO vo) {
+		int cnt = 0;
+
+		try {
+			Object obj = smc.insert("ShopReview.insertShopReview2", vo);
+			if (obj == null) {
+				cnt = 1;
+			} else {
+
+			}
+
+		} catch (SQLException e) {
+			cnt = 0;
+			e.printStackTrace();
+		}
+		return cnt;
+	}
+	
+	
+
+	
+	
+
+}

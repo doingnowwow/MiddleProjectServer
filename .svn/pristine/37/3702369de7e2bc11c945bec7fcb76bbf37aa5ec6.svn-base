@@ -1,0 +1,174 @@
+package kr.or.ddit.main;
+
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
+import kr.or.ddit.dao.PlayZzim.PlayZzimDaoImpl;
+import kr.or.ddit.service.Human_Mypage_Ranking.Human_MypageRankService;
+import kr.or.ddit.service.Human_Mypage_Ranking.Human_MypageRankServiceImpl;
+import kr.or.ddit.service.ILogin.ILoginService;
+import kr.or.ddit.service.ILogin.LoginServiceImpl;
+import kr.or.ddit.service.advertisement.AdvertisementService;
+import kr.or.ddit.service.advertisement.AdvertisementServiceImpl;
+import kr.or.ddit.service.blacklist.BlacklistService;
+import kr.or.ddit.service.blacklist.BlacklistServiceImpl;
+import kr.or.ddit.service.board.BoardService;
+import kr.or.ddit.service.board.BoardServiceImpl;
+import kr.or.ddit.service.book.BookService;
+import kr.or.ddit.service.book.BookServiceImpl;
+import kr.or.ddit.service.bookInfo.BookInfoService;
+import kr.or.ddit.service.bookInfo.BookInfoServiceImpl;
+import kr.or.ddit.service.cart2.Cart2Service;
+import kr.or.ddit.service.cart2.Cart2ServiceImpl;
+//import kr.or.ddit.service.cart2.Cart2Service;
+//import kr.or.ddit.service.cart2.Cart2ServiceImpl;
+import kr.or.ddit.service.chat.ChatServerImpl;
+import kr.or.ddit.service.com.ComService;
+import kr.or.ddit.service.com.ComServiceImpl;
+import kr.or.ddit.service.comReservCheck.ReservCheckService;
+import kr.or.ddit.service.comReservCheck.ReservCheckServiceImpl;
+import kr.or.ddit.service.dogBoard.DogBoardService;
+import kr.or.ddit.service.dogBoard.DogBoardServiceImpl;
+import kr.or.ddit.service.dogSale.DogSaleService;
+import kr.or.ddit.service.dogSale.DogSaleServiceImpl;
+import kr.or.ddit.service.dogSaleAdd.DogSaleAddService;
+import kr.or.ddit.service.dogSaleAdd.DogSaleAddServiceImpl;
+import kr.or.ddit.service.faq.FaqService;
+import kr.or.ddit.service.faq.FaqServiceImpl;
+import kr.or.ddit.service.horeview.HoReviewService;
+import kr.or.ddit.service.horeview.HoReviewServiceImpl;
+import kr.or.ddit.service.hotel.HotelService;
+import kr.or.ddit.service.hotel.HotelServiceImpl;
+import kr.or.ddit.service.hotelUp.HotelUpService;
+import kr.or.ddit.service.hotelUp.HotelUpServiceImpl;
+import kr.or.ddit.service.join.ComJoinServiceImpl;
+import kr.or.ddit.service.join.IComJoinService;
+import kr.or.ddit.service.join.IJoinService;
+import kr.or.ddit.service.join.JoinServiceImpl;
+import kr.or.ddit.service.like.LikeService;
+import kr.or.ddit.service.like.LikeServiceImpl;
+import kr.or.ddit.service.memDogInfo.MemDogInfoService;
+import kr.or.ddit.service.memDogInfo.MemDogInfoServiceImpl;
+import kr.or.ddit.service.memInfoUpdate.MemInfoUpdateService;
+import kr.or.ddit.service.memInfoUpdate.MemInfoUpdateServiceImpl;
+import kr.or.ddit.service.member.MemberService;
+import kr.or.ddit.service.member.MemberServiceImpl;
+import kr.or.ddit.service.memberSearch.MemberSearchService;
+import kr.or.ddit.service.memberSearch.MemberSearchServiceImpl;
+import kr.or.ddit.service.petSaleApp.PetSaleAppService;
+import kr.or.ddit.service.petSaleApp.PetSaleAppServiceImpl;
+import kr.or.ddit.service.playzzim.PlayZzimService;
+import kr.or.ddit.service.playzzim.PlayZzimServiceImpl;
+import kr.or.ddit.service.point.PointService;
+import kr.or.ddit.service.point.PointServiceImpl;
+import kr.or.ddit.service.prod.ProdService;
+import kr.or.ddit.service.prod.ProdServiceImpl;
+import kr.or.ddit.service.reviewBoard.ReviewBoardService;
+import kr.or.ddit.service.reviewBoard.ReviewBoardServiceImpl;
+import kr.or.ddit.service.shopReview.ShopReviewService;
+import kr.or.ddit.service.shopReview.ShopReviewServiceImpl;
+import kr.or.ddit.service.shopsell.ShopSellService;
+import kr.or.ddit.service.shopsell.ShopSellServiceImpl;
+
+
+public class ServerMain {
+   
+   public static void main(String[] args) throws RuntimeException{
+      
+      try {
+    	  
+         
+         Registry reg = LocateRegistry.createRegistry(8888); // 레지스트리 생성, 포트번호 8888
+        
+         ReviewBoardService reviewboardservice = ReviewBoardServiceImpl.getInstance();
+         MemberService memberService = MemberServiceImpl.getInstance();
+         FaqService faqService = FaqServiceImpl.getInstance();
+         ShopReviewService shopReviewService = ShopReviewServiceImpl.getInstance(); 
+         HotelService hotelService = HotelServiceImpl.getInstance();
+         BookService bookService = BookServiceImpl.getInstance();
+         ILoginService loginSer = LoginServiceImpl.getInstance();
+         BoardService boardservice = BoardServiceImpl.getInstance();
+         IJoinService joinSer = JoinServiceImpl.getInstance();
+         IComJoinService joincom = ComJoinServiceImpl.getInstance();
+         HoReviewService hore = HoReviewServiceImpl.getInstance();
+         ComService comservice = ComServiceImpl.getInstance(); 
+         MemInfoUpdateService memInfoService = MemInfoUpdateServiceImpl.getInstance();
+         ReservCheckService rcs = ReservCheckServiceImpl.getInstance();
+         MemDogInfoService memDogInfo = MemDogInfoServiceImpl.getInstance();
+         ChatServerImpl Server = new ChatServerImpl(); //이거채팅서버임
+         HotelUpService houpservice = HotelUpServiceImpl.getInstance();
+         DogSaleAddService dsaSer = DogSaleAddServiceImpl.getInstance();
+         PetSaleAppService psas = PetSaleAppServiceImpl.getInstance();
+         MemberSearchService mss = MemberSearchServiceImpl.getInstance();
+         DogSaleService dss = DogSaleServiceImpl.getInstance();
+         ProdService shopMain = ProdServiceImpl.getInstance();
+         Cart2Service cart = Cart2ServiceImpl.getInstance();
+         BookInfoService bookInfoService = BookInfoServiceImpl.getInstance();
+         Human_MypageRankService myRankPoint = Human_MypageRankServiceImpl.getInstance();
+         PointService pointService = PointServiceImpl.getInstance();
+         AdvertisementService ads = AdvertisementServiceImpl.getInstance();
+         LikeService LikeService = LikeServiceImpl.getInstance();
+         PlayZzimService zzimService = PlayZzimServiceImpl.getInstance();
+         ShopSellService sell = ShopSellServiceImpl.getInstance();
+         DogBoardService dbs = DogBoardServiceImpl.getInstance();
+         BlacklistService bs = BlacklistServiceImpl.getInstance();
+         
+         
+         /*도영*/
+         reg.rebind("ReservCheck", rcs);
+         reg.rebind("hotelReview", hore);
+         reg.rebind("comjoin", joincom);
+         reg.rebind("userJoin", joinSer);
+         reg.rebind("LoginUser", loginSer);
+         reg.rebind("petSApp", psas);
+         reg.rebind("memSearch", mss);
+         reg.rebind("adver", ads);
+         reg.rebind("black", bs);
+         
+         
+         reg.rebind("memberService",memberService); // 한선/회원정보 수정때도 사용합니당~
+         reg.rebind("faqService", faqService);// memberService 를 레지스트리에 등록.
+         reg.rebind("dogBoardService", dbs);  //누구 꺼야 왜 추가안했으
+         
+         /*선재*/
+         reg.rebind("boardservice", boardservice);
+         reg.rebind("reviewboardservice", reviewboardservice);
+         reg.rebind("cart2Service", cart);
+        
+         /*서현*/
+         reg.rebind("bookService",bookService);
+         reg.rebind("HotelUpService",houpservice); // 호텔등록
+         reg.rebind("DogSaleAddService", dsaSer);// 분양등록
+         reg.rebind("LikeService", LikeService); // 찜 목록
+         
+         /*한선*/
+          reg.rebind("shopReviewService", shopReviewService); //한선이가 테스트용으로 만듬.
+          reg.rebind("comservice", comservice);
+          reg.rebind("memInfoService",  memInfoService);
+          reg.rebind("memDogInfo", memDogInfo);
+          reg.rebind("RMIChatServer", Server);
+          reg.rebind("shopMain", shopMain); //쇼핑몰메인
+          reg.rebind("sell", sell); //판매내역 조회
+          
+          /*승재 왜 내꺼만 안살려줘 ㅡ,.ㅡ*/
+          reg.rebind("myRankPoint", myRankPoint);
+          reg.rebind("bookInfoService", bookInfoService); 
+          reg.rebind("pointService", pointService); 
+          reg.rebind("zzimService", zzimService);
+          
+         reg.rebind("hotelService", hotelService);
+         reg.rebind("dogsaleService", dss);
+         
+         
+         
+      } catch (RemoteException e) {
+         System.out.println("시발에러");
+         System.out.println("개같은 에러");
+         e.printStackTrace();
+      }
+      
+      System.out.println("Puppy Delluna 서버준비 완료");
+      
+   }
+}

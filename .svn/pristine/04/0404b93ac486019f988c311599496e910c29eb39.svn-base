@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+         PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+         "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="prodPay">
+
+	<insert id="insertProd" parameterClass="ProdPayVO">
+			INSERT INTO prod_pay (
+				    prod_pay_no,
+				    prod_pay_date,      
+				    prod_pay_gu,        
+				    del_detail,         
+				    cart_id,
+				    del_addr1,
+				    del_addr2
+				) VALUES (
+			    (select nvl(max(prod_pay_no), 0) +1 from prod_pay),
+			    sysdate,
+			    #prod_pay_gu#,
+			    #del_detail#,
+			    #cart_id#,
+			    #del_addr1#,
+			    #del_addr2#
+			);
+	</insert>
+	
+	<select id="getProdPayAllList" resultClass = "ProdPayVO" parameterClass="ProdPayVO" >
+	SELECT
+        b.mem_no,
+        b.cart_id,
+        c.prod_name,
+        c.prod_img,
+        d.POINT_NO,
+        b.cart_qty,
+        d.POINT_MONEY,
+        d.POINT_USE,
+        d.POINT_USE_DATE,
+        d.POINT_SAVE_DATE,
+        d.POINT_CONTENTS,
+        d.POINT_MYPOINT,
+        c.prod_cost,
+        c.prod_cost*b.cart_qty as sumprice,
+        e.MEM_NAME,
+        e.MEM_ADDR1,
+        e.MEM_ADDR2
+    	from cart b 
+    	left join prod c on b.prod_id = c.prod_id
+    	left join point d on b.mem_no = d.mem_no
+    	left join member e on e.mem_no = d.mem_no
+    	where 1=1
+    	and point_no = (select max(point_no) from point where mem_no = #mem_no#);
+		
+	</select>
+	
+
+
+
+
+</sqlMap>

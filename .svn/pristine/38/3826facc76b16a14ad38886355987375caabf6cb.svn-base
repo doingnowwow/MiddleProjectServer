@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+			
+<sqlMap namespace="dogSaleAdd">
+
+	<insert id="insertDogSaleAdd" parameterClass="DogSaleAddVO">
+		insert into dog_sale(dog_no, dog_name, dog_gu, dog_size,dog_gender,dog_bir,dog_intro,dog_infodetail,com_no)
+		values((select nvl(max(dog_no),0)+1 from dog_sale), #dog_name#, #dog_gu#, #dog_size#,#dog_gender#,#dog_bir#,#dog_intro#,#dog_infodetail#,#com_no#)
+	</insert>
+
+	<delete id="deleteDogSaleAdd" parameterClass="DogSaleAddVO">
+		delete from dog_sale
+		 where dog_no = #dog_no#
+		   and com_no = #com_no#
+	</delete>
+	
+	<select id="AllSaleAddList" resultClass="DogSaleAddVO" parameterClass="Integer">
+		select * from dog_sale 
+		 where com_no = #com_no#
+	</select>
+	
+	<update id="updateDogSaleAdd" parameterClass="DogSaleAddVO">
+		update dog_sale 
+		set dog_name = #dog_name#,
+			dog_gu = #dog_gu#,
+			dog_size = #dog_size#,
+			dog_gender = #dog_gender#,
+			dog_bir =  #dog_bir#,
+			dog_intro =#dog_intro#,
+			dog_infodetail =#dog_infodetail#
+		where dog_no = #dog_no#
+		  and com_no = #com_no#
+	</update>
+</sqlMap>			

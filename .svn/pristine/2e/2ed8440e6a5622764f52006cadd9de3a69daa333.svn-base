@@ -1,0 +1,70 @@
+package kr.or.ddit.dao.petSaleApp;
+
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import kr.or.ddit.util.SqlMapClientFactory;
+import kr.or.ddit.vo.PetSaleAppVO;
+
+public class PetSaleAppDaoImpl implements PetSaleAppDao {
+
+	private static PetSaleAppDaoImpl dao = new PetSaleAppDaoImpl();
+	private SqlMapClient smc;
+	
+	private PetSaleAppDaoImpl() {
+		smc = SqlMapClientFactory.getInstance();
+	}
+	
+	public static PetSaleAppDaoImpl getInstance() {
+		if( dao == null) {
+			dao = new PetSaleAppDaoImpl();
+		}
+		return dao;
+	}
+	
+	@Override
+	public List<PetSaleAppVO> getAllApp(PetSaleAppVO pv) throws RemoteException {
+		List<PetSaleAppVO> pet_list = null;
+		
+		try {
+			pet_list = smc.queryForList("psApp.getAllApp", pv);
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return pet_list;
+	}
+
+	@Override
+	public int updatePetInfo(PetSaleAppVO pv) throws RemoteException {
+		int cnt = 0;
+		
+		try {
+			cnt = smc.update("psApp.updatePetInfo", pv);
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cnt;
+	}
+
+	@Override
+	public int insertApp(PetSaleAppVO pv) throws RemoteException {
+		int cnt = 0;
+		
+		try {
+			Object obj = smc.insert("psApp.insertApp", pv);
+			if(obj == null) {
+				cnt = 1;
+			}else {
+				cnt = 0;
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cnt;
+	}
+
+}

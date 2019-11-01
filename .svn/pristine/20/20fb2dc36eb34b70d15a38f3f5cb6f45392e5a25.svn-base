@@ -1,0 +1,73 @@
+package kr.or.ddit.service.reviewBoard;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
+
+import kr.or.ddit.dao.board.BoardDao;
+import kr.or.ddit.dao.board.BoardDaoImpl;
+import kr.or.ddit.dao.reviewBoard.ReviewBoardDao;
+import kr.or.ddit.dao.reviewBoard.ReviewBoardDaoImpl;
+import kr.or.ddit.service.board.BoardServiceImpl;
+import kr.or.ddit.vo.ReviewBoardVO;
+
+
+
+public class ReviewBoardServiceImpl extends UnicastRemoteObject implements ReviewBoardService {
+	
+	ReviewBoardDao reviewboardDao;
+
+	private static ReviewBoardServiceImpl service;//Singleton패턴
+
+	private ReviewBoardServiceImpl() throws RemoteException {
+		super();
+		reviewboardDao =  ReviewBoardDaoImpl.getInstance();//Singleton패턴s
+	}
+
+	public static ReviewBoardServiceImpl getInstance() throws RemoteException {
+		if(service== null) {
+			service = new ReviewBoardServiceImpl();
+		}
+		return service;
+	}
+	
+	@Override
+	public int insertReBoard(ReviewBoardVO vo) throws RemoteException {
+		// TODO Auto-generated method stub
+		return reviewboardDao.insertReviewBoard(vo);
+	}
+
+	@Override
+	public int updateReBoard(ReviewBoardVO vo) throws RemoteException {
+		// TODO Auto-generated method stub
+		return reviewboardDao.updateReviewBoard(vo);
+	}
+
+	@Override
+	public int deleteReBoard(ReviewBoardVO vo) throws RemoteException {
+		// TODO Auto-generated method stub
+		return reviewboardDao.deleteReviewBoard(vo);
+	}
+
+	@Override
+	public List<ReviewBoardVO> getReAllList() throws RemoteException {
+		// TODO Auto-generated method stub
+		return reviewboardDao.getReAllList();
+	}
+
+	@Override
+	public List<ReviewBoardVO> readReBoard(ReviewBoardVO vo) throws RemoteException {
+		// TODO Auto-generated method stub
+		return reviewboardDao.readReBoard(vo);
+	}
+
+	@Override
+	public boolean getReBoardNo(Integer Rebd_no) throws RemoteException {
+		// TODO Auto-generated method stub
+		return reviewboardDao.getReviewBoardNo(Rebd_no);
+	}
+
+	
+	
+
+}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="QnA">
+
+   <select id="getAllQnA" resultClass="boardVO" parameterClass="String">
+      select qa_no,qa_writer,qa_title
+        from QNA
+        order by qa_no
+   </select>
+        
+   <select id="getAllQnA" resultClass="BoardVO" parameterClass="String">
+      select bd_no,bd_title,bd_content,mem_id,bd_date,bd_open,bd_up
+        from board
+        order by bd_no
+   </select>
+        
+   <select id="getAllQnA" resultClass="qnaBoardVO" parameterClass="String">
+      select qa_no, qa_title, qa_writer, qa_content, qa_re, qa_re_check, mem_no, qa_ca
+        from qna
+        order by 1;
+   </select>
+			
+	
+	
+   <insert id="qnaBoard" parameterClass="qnaBoardVO">
+       insert into qna(qa_no, qa_title, qa_content, mem_no) 
+            values((select nvl(max(qa_no),0)+1 from qna), #qa_title#, #qa_content#,'team3')
+   </insert>
+</sqlMap>
+
+<!-- 주석은 한줄 당 하나씩 다세요 여러줄을 한개의 주석으로 감싸면 오류뜹니다.  -->
+	
+<!-- 	<update id="updateQnA"> -->
+<!-- 	</update> -->
+	
+	
+<!-- 	<delete id="deleteQnA"> -->
+<!-- 	</delete> -->
+	
+<!-- 	<select id="getSearchQnA"> -->
+<!-- 	</select> -->
+	
+	
+<!-- 	<insert id="insertQnAComment"> -->
+<!-- 	</insert> -->
+	
+	
+<!-- 	<update id="updateQnAComment"> -->
+<!-- 	</update> -->
+	
+	
+<!-- 	<delete id="deleteQnAComment"> -->
+<!-- 	 delete from QNA where QA_NO = #QA_NO# -->
+<!-- 	</delete> -->

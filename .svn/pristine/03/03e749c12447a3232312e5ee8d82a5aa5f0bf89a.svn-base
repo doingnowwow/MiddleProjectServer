@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+         PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+         "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+         
+<sqlMap namespace="hReview">
+
+	<select id="selectListMy" resultClass="hotelReviewVO" parameterClass="hotelReviewVO">
+		select a.hore_date, a.hore_content, b.hotel_name, a.hore_star
+		  from horeview a, hotel b
+		 where a.hotel_no = b.hotel_no
+		   and a.mem_no = #mem_no# 
+		 order by a.hore_date desc  
+	</select>
+	
+	<select id="selectListHotel" resultClass="hotelReviewVO" parameterClass="hotelReviewVO" >
+		select hore_date, hore_content, hore_writer, hore_star
+		  from horeview 
+		 where hotel_no = #hotel_no# 
+	</select>
+	
+	<select id="selectMyReviewDate" resultClass="hotelReviewVO" parameterClass="hotelReviewVO" >
+		select to_char(a.hore_date, 'YYYY/MM/DD') as hore_date, a.hore_content, b.hotel_name, a.hore_star
+  		  from horeview a, hotel b
+		 where 1=1
+		   and a.hotel_no = b.hotel_no
+  		   and a.mem_no = #mem_no#
+  		   <isNotEmpty property="hopick_date1">
+           and a.hore_date between #hopick_date1#  and #hopick_date2#
+  		   </isNotEmpty>
+	</select>
+	
+	<select id="selectMyReviewText" resultClass="hotelReviewVO" parameterClass="hotelReviewVO">
+  		 select to_char(a.hore_date, 'YYYY/MM/DD') as hore_date, a.hore_content, b.hotel_name, a.hore_star  
+  		   from horeview a, hotel b
+  		  where a.hotel_no = b.hotel_no
+  		    and mem_no = #mem_no#
+  		    and hore_title like '%' || #hore_title# || '%'
+  		    or hore_content like '%' || #hore_content# || '%'
+	</select>
+
+	<insert id="insertHotelReview" parameterClass="hotelReviewVO" >
+		insert into horeview (hore_no, mem_no, hotel_no, hore_date, hore_writer, hore_content, hore_star)
+		  values ((select nvl(max(hore_no),0)+1 from horeview), #mem_no#, #hotel_no#, sysdate, #hore_writer#, #hore_content#, #hore_star#)
+	</insert>
+
+</sqlMap>         

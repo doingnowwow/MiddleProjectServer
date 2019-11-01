@@ -1,0 +1,66 @@
+package kr.or.ddit.service.shopReview;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
+
+import kr.or.ddit.dao.shopReivew.ShopReviewDaoImpl;
+import kr.or.ddit.vo.ProdVO;
+import kr.or.ddit.vo.ShopReviewVO;
+
+public class ShopReviewServiceImpl extends UnicastRemoteObject implements ShopReviewService {
+
+	ShopReviewDaoImpl sReviewdao;
+
+	public static ShopReviewServiceImpl service;
+
+	public ShopReviewServiceImpl() throws RemoteException {
+		super();
+		sReviewdao = ShopReviewDaoImpl.getInstance();
+	}
+
+	public static ShopReviewServiceImpl getInstance() throws RemoteException{
+		if(service == null) {
+			service = new ShopReviewServiceImpl();
+		}
+		return service;
+	}
+
+	@Override
+	public List<ShopReviewVO> ShopReviewAll()throws RemoteException {
+		return sReviewdao.ShopReviewAll();
+	}
+
+	@Override
+	public List<ShopReviewVO> selectMyShopReview(ShopReviewVO mv) throws RemoteException {
+		return sReviewdao.selectMyShopReview(mv);
+	}
+
+	@Override
+	public int insertShopReveiw(ShopReviewVO vo)throws RemoteException {
+
+		return sReviewdao.insertShopReveiw(vo);
+	}
+
+	@Override
+	public int deleteShopReview(ShopReviewVO vo) throws RemoteException{
+		return sReviewdao.deleteShopReview(vo);
+	}
+
+	@Override
+	public int updateShopReview(ShopReviewVO vo) throws RemoteException{
+		return sReviewdao.updateShopReview(vo);
+	}
+
+
+	@Override
+	public List<ShopReviewVO> selectMyReviewDate(ShopReviewVO mv) throws RemoteException {
+		return sReviewdao.selectMyShopReview(mv);
+	}
+
+	@Override
+	public List<ShopReviewVO> selectProdReview(ShopReviewVO prod_id) throws RemoteException {
+		return sReviewdao.selectProdReview(prod_id);
+	}
+
+}

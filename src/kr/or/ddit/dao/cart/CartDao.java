@@ -1,0 +1,20 @@
+package kr.or.ddit.dao.cart;
+
+import java.util.List;
+
+import kr.or.ddit.vo.CartVO;
+
+import kr.or.ddit.vo.PointVO;
+import kr.or.ddit.vo.ShoppingVO;
+
+public interface CartDao {
+
+	public List<CartVO> getAllList(CartVO cv); // 카트에 담겨져있는거 모두 보여주기
+
+	public int insertCart(CartVO sv); // 카트에 상품 추가하기
+	
+	public int deleteCart(CartVO sv); // 카트에 상품 삭제하기
+
+	public PointVO getPoint(PointVO pv); // 포인트 불러오기
+
+}

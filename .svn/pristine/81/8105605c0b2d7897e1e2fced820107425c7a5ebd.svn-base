@@ -1,0 +1,42 @@
+package kr.or.ddit.service.point;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
+
+import kr.or.ddit.dao.point.PointDaoImpl;
+import kr.or.ddit.vo.PointVO;
+
+public class PointServiceImpl extends UnicastRemoteObject implements PointService {
+	PointDaoImpl pointDao; // 사용할 Dao의 멤버변수 선언
+	
+	private static PointServiceImpl service; // singleton 패턴
+	
+	private PointServiceImpl() throws RemoteException {
+		super();
+		pointDao = PointDaoImpl.getInstance(); // Singleton 패턴
+	}
+	
+	public static PointServiceImpl getInstance() throws RemoteException {
+		if(service == null) {
+			service = new PointServiceImpl();
+		}
+		return service;
+	}
+
+	@Override
+	public int insertPointReserv(PointVO vo) throws RemoteException {
+		return pointDao.insertPointReserv(vo);
+	}
+
+	@Override
+	public int searchMyPoint(PointVO vo) throws RemoteException {
+		return pointDao.searchMyPoint(vo);
+	}
+
+	@Override
+	public List<PointVO> searchMem_no(int mem_no) throws RemoteException {
+		return pointDao.searchMem_no(mem_no);
+	}
+
+}

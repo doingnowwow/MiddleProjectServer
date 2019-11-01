@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		
+<sqlMap namespace="hotelUp">
+
+	<insert id="insertHotelUp" parameterClass="hotelUpVO">
+		insert into hotel (hotel_no, hotel_name, hotel_addr1, hotel_addr2, hotel_tel, hotel_intro, com_no)
+		values((select nvl(max(hotel_no),0)+1 from hotel), #hotel_name#, #hotel_addr1#, #hotel_addr2#, #hotel_tel#, #hotel_intro#, #com_no#)
+	</insert>
+	
+	
+	<delete id="deleteHotelUp" parameterClass="hotelUpVO"> 
+		delete from hotel
+		where com_no = #com_no#
+		  and hotel_name = #hotel_name#
+	</delete>
+	
+	<select id="selectHotelList" resultClass="hotelUpVO" parameterClass="hotelUpVO">
+		select *  
+		  from hotel
+		where com_no = #com_no#
+	</select>
+	
+	<update id="updateHotelUp" parameterClass="hotelUpVO">
+		update hotel
+		set hotel_name = #hotel_name#,
+			hotel_addr1 = #hotel_addr1#,
+			hotel_addr2 = #hotel_addr2#,
+			hotel_tel = #hotel_tel#,
+			hotel_intro=  #hotel_intro#
+		where com_no = #com_no#
+          and hotel_no = #hotel_no#
+	</update>
+
+
+</sqlMap>

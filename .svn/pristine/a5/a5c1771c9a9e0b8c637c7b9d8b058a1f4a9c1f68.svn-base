@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="member">
+	<select id="login" resultClass="memVO" parameterClass="memVO">
+		select *
+		from member where mem_id=#mem_id# and mem_pw=#mem_pw#
+	</select>
+
+	<select id="getAllMember" resultClass="memVO"
+		parameterClass="int">
+		select * from member where mem_id=#mem_id#
+	</select>
+
+	<select id="getDogList" resultClass="memDogVO"
+		parameterClass="int">
+		select * from mem_Dog where mem_no=#mem_no#
+	</select>
+
+	<update id="updateMember" parameterClass="memVO">
+		update member
+		set mem_pw = #mem_pw#
+		mem_email=#mem_email#
+		mem_tel=#mem_tel#
+		mem_addr1=#mem_addr1#
+		mem_addr2 = #mem_addr2#
+		where mem_no = #mem_no#
+	</update>
+
+	<delete id="deleteMember" parameterClass="int">
+		delete from member
+		where MemDogVO=#MemDogVO#
+	</delete>
+
+
+	<select id="getSearchMember" parameterClass="memVO"
+		resultClass="memVO">
+		select * from member where 1=1
+		<isNotEmpty property="mem_id">
+			and mem_id=#mem_id#
+		</isNotEmpty>
+		<isNotEmpty>
+			and mem_name=#mem_name#
+		</isNotEmpty>
+		<isNotEmpty>
+			and mem_addr1 like '%'|| #mem_addr1# || '%'
+		</isNotEmpty>
+		<isNotEmpty>
+			and mem_addr2 like '%'|| #mem_addr2# || '%'
+		</isNotEmpty>
+	</select>
+
+	<!-- 일반회원 블랙리스트 CRUD(파양횟수 3회이상이면 블랙리스트) -->
+
+	<select id="getReadyBlackMember" resultClass="memVO">
+
+		select
+		member.mem_no,member.mem_id,member.mem_pw,member.mem_tel,count(black.black_cnt)
+		as black_cnt
+		from member,black
+		where member.mem_no=black.mem_no
+		and
+		black_cnt >= 3
+		group by member.mem_no,member.mem_id,member.mem_pw,member.mem_tel
+		HAVING count(black.black_cnt) >= 3
+
+		<!-- select member.mem_no,member.mem_name,member.mem_id,member.mem_hp,reservation.no_show 
+			from member,reservation where member.mem_no=reservation.mem_no and reservation.no_show>2 
+			minus select member.mem_no,member.mem_name,member.mem_id,member.mem_hp,reservation.no_show 
+			from member,reservation,black where member.mem_no=reservation.mem_no and 
+			member.mem_no=black.mem_no -->
+	</select>
+
+
+	<update id="insertBlackMember" parameterClass="memVO">
+
+		insert into black
+		( mem_no, black_cnt)
+
+		values (#mem_no#, sysdate)
+
+
+	</update>
+
+	<update id="deleteBlackMember" parameterClass="memVO">
+
+		delete from black
+		where mem_no = #mem_no#
+
+	</update>
+
+	<select id="getgrade" parameterClass="memVO"
+		resultClass="String">
+    <![CDATA[
+      SELECT 
+        CASE  
+        WHEN mem_point < 150 THEN 'Bronze'  
+        WHEN mem_point >= 151 and mem_point < 500 THEN 'silver'  
+        WHEN mem_point >= 501 and mem_point < 1500 THEN 'gold'  
+        ELSE 'VIP' 
+        END as GRADE
+        FROM member
+     ]]>
+	</select>
+
+	<update id="updategrade" parameterClass="memVO">
+		update member
+		set mem_point = #mem_point#
+		where mem_no = #mem_no#
+	</update>
+
+
+	<select id="getList" resultClass="memVO">
+
+		 
+        select * from member
+
+	</select>
+
+
+
+
+
+
+
+
+
+</sqlMap>			
+			

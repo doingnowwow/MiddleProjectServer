@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		
+<sqlMap namespace="hotel">
+	<select id="select" resultClass="hotelVO" parameterClass="hotelVO" >
+		select hotel_no, hotel_name, hotel_addr1, hotel_addr2, hotel_tel, img, hotel_intro, hotel_cost,hotel_map 
+		  from hotel 
+		 where hotel_no = #hotel_no#
+	</select>
+
+	<select id="selectHotelList" resultClass="hotelVO" parameterClass="hotelVO">
+		SELECT
+		    A.HOTEL_NO,
+		    A.HOTEL_NAME,
+		    A.HOTEL_ADDR1,
+		    A.HOTEL_ADDR2,
+		    A.HOTEL_TEL,
+		    A.HOTEL_INTRO,
+		    A.COM_NO,
+		    A.IMG,
+		    A.hotel_map,
+            (select round(avg(hore_star), 1) from HOREVIEW where HOTEL_NO = A.HOTEL_NO GROUP BY HOTEL_NO) as hore_star
+		FROM
+		    HOTEL A
+		WHERE 1=1
+        	AND HOTEL_NAME LIKE '%'||#hotel_name#||'%'
+        	ORDER BY
+       	<isEqual property="order" compareValue="-전체-">
+       		A.HOTEL_NO desc
+       	</isEqual>
+       	<isEqual property="order" compareValue="별점▲">
+			 HORE_STAR asc
+       	</isEqual>
+       	<isEqual property="order" compareValue="별점▼">
+			 HORE_STAR desc
+       	</isEqual>
+	</select>
+	
+	<select id="getAllHotelList" resultClass="hotelVO">
+		
+		SELECT
+		   	HOTEL_NO,
+		    HOTEL_NAME,
+		    HOTEL_ADDR1,
+		    HOTEL_ADDR2,
+		    HOTEL_TEL,
+		    HOTEL_INTRO,
+		    COM_NO,
+		    IMG,
+		    HOTEL_COST,
+		    hotel_map
+         FROM HOTEL
+         
+	</select>
+	
+
+	<insert id="insertHotel" parameterClass="hotelVO">
+		insert into hotel (hotel_no,hotel_tel, com_no, hotel_addr1,hotel_addr2, img
+				hotel_intro)
+			values((select nvl(hotel_no)+1,0) from hotel),#hotel_no#,#hotel_tel#, #com_no#, #hotel_addr1#,#hotel_addr2#,
+				#img#, #hotel_intro#,)
+	</insert>
+	
+	<delete id="deleteHotel" parameterClass="hotelVO">
+		delete from hotel
+		where hotel_no = #hotel_no#
+		  and com_no = #com_no#
+	</delete>
+	
+	<select id="hoNoSearch" resultClass="hotelVO" parameterClass="hotelVO" >
+		select HOTEL_NO
+               , HOTEL_NAME
+               , HOTEL_ADDR1
+               , HOTEL_ADDR2
+               , HOTEL_TEL
+               , IMG
+               , COM_NO
+               , HOTEL_COST
+		  from hotel
+		 where hotel_no = #hotel_no#
+	</select>
+	
+</sqlMap>
+			

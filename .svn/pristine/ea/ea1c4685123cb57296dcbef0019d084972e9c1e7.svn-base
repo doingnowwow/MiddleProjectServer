@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+			
+<sqlMap namespace="mems">	
+	<!-- 일반회원 찾기  -->
+	<select id="getAllMember" resultClass="memSearVO" >
+		select * from member
+	</select>
+	
+	<select id="getMemberByTF" resultClass="memSearVO" parameterClass="memSearVO">
+		select mem_id, mem_email, mem_name, mem_tel, mem_addr1, mem_addr2, mem_point, mem_level
+		  from member
+		 where 1=1
+		   and (mem_id = #mem_id#
+		    or mem_name = #mem_name#
+		    or mem_addr1 like '%' || #mem_addr1# || '%'
+		    or mem_addr2 like '%' || #mem_addr2# || '%'
+		    or mem_level like '%' || #mem_level# || '%'
+		    or mem_tel like '%' || #mem_tel# || '%' )
+	</select>
+	
+	<!-- 일반회원의 애견 찾기 -->
+	<select id="getAllMemPet" resultClass="memSearVO" >
+		select b.mem_id, a.mem_dog_name, a.mem_dog_gu, a.mem_dog_gender, a.mem_dog_size, a.mem_dog_bir, a.mem_dog_intro
+		  from mem_dog a, member b
+		 where a.mem_no = b.mem_no
+	</select>
+	
+	<select id="getMemPetByTF" resultClass="memSearVO" parameterClass="memSearVO">
+		select b.mem_id, a.mem_dog_name, a.mem_dog_gu, a.mem_dog_gender, a.mem_dog_size, a.mem_dog_bir, a.mem_dog_intro
+		  from mem_dog a, member b
+		 where a.mem_no = b.mem_no
+		    and (mem_id = #mem_id#
+		    or mem_dog_name = #mem_dog_name#
+		    or mem_dog_gu like '%' || #mem_dog_gu# || '%'
+		    or mem_dog_gender like '%' || #mem_dog_gender# || '%'
+		    or mem_dog_size = #mem_dog_size# )
+	</select>
+	
+	<!-- 사업주 찾기 -->
+	<select id="getAllComMem" resultClass="memSearVO" >
+		select a.com_id, a.com_email, a.com_name, a.com_tel, b.hotel_name, b.hotel_tel, b.hotel_intro
+		  from com a , hotel b
+         where a.com_no = b.com_no
+	</select>
+	
+	<select id="getComMemByTF" resultClass="memSearVO" parameterClass="memSearVO">
+		select a.com_id, a.com_email, a.com_name, a.com_tel, b.hotel_name, b.hotel_tel, b.hotel_intro
+		  from com a , hotel b
+		 where a.com_no = b.com_no
+		   and (a.com_name = #com_name#
+		    or a.com_email like '%'|| #com_email# ||'%'
+		    or a.com_tel like '%'|| #com_tel# ||'%'
+		    or b.hotel_name like '%'|| #hotel_name# ||'%'
+		    or b.hotel_tel like '%'|| #hotel_tel# ||'%'
+		    or b.hotel_intro like '%'|| #hotel_intro# ||'%' )
+	</select>
+</sqlMap>			

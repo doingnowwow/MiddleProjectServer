@@ -1,0 +1,16 @@
+package kr.or.ddit.dao.like;
+
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.util.List;
+
+import kr.or.ddit.vo.LikeVO;
+
+public interface LikeDao extends Remote {
+	
+	//찜 조회 회원 별
+	public List<LikeVO> dlikelist (int mem_no) throws RemoteException;
+
+	public int deleteDlike(LikeVO vo) throws RemoteException;
+
+}

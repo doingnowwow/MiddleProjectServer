@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="black">
+
+	<insert id="insertBlack" parameterClass="blackVO">
+		insert into black (mem_no, black_cnt, mem_id)
+		  values ((select mem_no from member where mem_id=#mem_id#), 1, #mem_id#)
+	</insert>
+	
+	<update id="updateBlack" parameterClass="blackVO">
+		 update black
+           set black_cnt = (select black_cnt from black where mem_id = #mem_id#) + 1
+          where mem_id = #mem_id#
+	</update>
+	
+	<delete id="deleteBlack" parameterClass="blackVO">
+		delete 
+  		  from member
+		 where mem_no = #mem_no#
+	</delete>
+	
+	<select id="showAllb" resultClass="blackVO">
+		select a.mem_no, a.mem_id, a.black_cnt, b.mem_email, b.mem_tel
+  		  from black a, member b
+ 		 where a.mem_no = b.mem_no
+ 		 order by mem_no 
+	</select>
+	
+	<select id="searchB" parameterClass="blackVO" resultClass="blackVO">
+		select mem_id
+  		  from black
+ 		 where mem_id = #mem_id#
+	</select>
+
+
+</sqlMap>			

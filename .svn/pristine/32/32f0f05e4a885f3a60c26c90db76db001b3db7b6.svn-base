@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- namespace속성 : 아래에서 작성한 SQL을 호출할 때, 같이 사용된다. -->
+<sqlMap namespace="comInfo">
+	
+
+	<!-- 아이디 로그인 후 pw 가져오기 -->
+	<select id="getComPw" resultClass="comVO" parameterClass="comVO">
+
+		select
+		com_pw
+		from com
+		where com_id = #com_id#
+
+
+	</select>
+	
+	
+	<!-- 마이페이지로 들어온 후  정보 전부다 가져오기-->
+	  
+	<select id="getComDefaultInfo" resultClass="comVO" parameterClass="comVO">
+	
+	
+	select *
+	from com
+	where
+	com_id =#com_id#
+	
+	
+	</select>
+	
+	<select id ="getComAllInfo" resultClass="comVO" parameterClass="comVO">
+	
+	selcet *
+	from com
+	where
+	com_no = #com_no#
+	
+	</select>
+	
+
+	
+	
+	
+	
+	<!-- com의 name 가져오기 -->
+	<select id="getComName" resultClass="comVO" parameterClass="String">
+	
+		select
+		com_name
+		from com
+		where com_id = #com_id#
+	</select>
+	
+	<!-- 주소 가져오기 addr1 + addr2 -->
+	<select id="getComAddr" resultClass="comVO" parameterClass="String">
+	
+	select
+	com_addr1 || com_addr2
+	from com
+	where com_id = #com_id#
+	
+	
+	</select>
+
+ 	<!-- com회원삭제(탈퇴) -->
+ 	
+ 	<update id="deleteCom"  parameterClass="comVO">
+ 	
+ 	delete from com
+ 	where com_id = #com_id#
+ 	
+ 	</update>
+
+
+	<!-- com 회원 정보수정 -->
+	<update id="updateCom" parameterClass="comVO">
+		update com
+		set
+
+		com_pw = #com_pw#,
+		com_name = #com_name#,
+		com_addr1 = #com_addr1#,
+		com_addr2 = #com_addr2#,
+		com_tel = #com_tel#,
+		com_ceo = #com_ceo#,
+		com_email = #com_email#
+		where com_id = #com_id#
+
+</update>
+	
+	<!--  승재 -->
+	<select id="seachComvo" parameterClass="ComVO" resultClass="ComVo">
+		SELECT
+			com_no
+			, mem_no
+			, com_id
+			, com_pw
+			, com_name
+			, com_addr1
+			, com_addr2
+			, com_tel
+			, com_ceo
+			, com_email
+		FROM COM
+		WHERE COM_NO = #com_no#
+		
+	</select>
+	
+	<select id = "getAllMember" resultClass = "ComVO">
+	select * from com
+	</select>
+ 
+
+
+
+</sqlMap>
+			
+
+
+
+
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+			
+<sqlMap namespace="psApp">
+
+	<!-- 사업자가 보는 분양 신청 목록 -->
+	<select id="getAllApp" resultClass="psAppVO" parameterClass="psAppVO" >
+		SELECT A.DOG_NO, B.DOG_NAME, B.DOG_GU, C.MEM_NAME, A.REQ_DATE, A.ACCP_YN, C.MEM_TEL
+		  FROM DOG_SALE_DETAIL A , DOG_SALE B , MEMBER C
+		 WHERE A.DOG_NO = B.DOG_NO
+		   AND A.MEM_NO = C.MEM_NO
+		   AND A.COM_NO = #com_no#
+	</select>
+	
+	<update id="updatePetInfo" parameterClass="psAppVO" >
+		update dog_sale_detail
+		   set accp_yn = #accp_yn#
+		 where dog_no = #dog_no# 
+	</update>
+	
+
+</sqlMap>			

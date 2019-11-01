@@ -1,0 +1,55 @@
+package kr.or.ddit.dao.like;
+
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+import kr.or.ddit.util.SqlMapClientFactory;
+import kr.or.ddit.vo.LikeVO;
+
+public class LikeDaoImpl implements LikeDao  {
+	
+	private static LikeDaoImpl likeDao;
+	private SqlMapClient smc;
+	
+	private LikeDaoImpl() {
+		smc = SqlMapClientFactory.getInstance();
+	}
+	
+	public static LikeDaoImpl getInstance() {
+		if(likeDao == null) {
+			likeDao = new LikeDaoImpl();
+		}
+		return likeDao;
+	}
+	
+	
+	@Override
+	public List<LikeVO> dlikelist(int mem_no) throws RemoteException {
+		List<LikeVO> l_list = null;
+		
+		try {
+			l_list = smc.queryForList("dlike.dlikelist",mem_no);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return l_list;
+	}
+
+	@Override
+	public int deleteDlike(LikeVO vo) throws RemoteException {
+		int cnt = 0;
+		
+		try {
+			cnt=smc.delete("dlike.deleteDlike", vo);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return cnt;
+	}
+
+	
+
+}

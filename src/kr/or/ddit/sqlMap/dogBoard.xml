@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="dogBoard">
+
+
+<!-- 게시글 작성 -->
+ 	<insert id="insertDogBoard" parameterClass="dogBoardVO">
+		 
+		 insert into dogboard b(dogboard_no, mem_no, dogboard_title,
+		 dogboard_content,dogboard_date, dogboard_img)  
+		      values((select nvl(max(dogboard_no),0)+1 from dogboard), #mem_no#, #dogboard_title#,
+		      #dogboard_content#, sysdate, #dogboard_img#) 
+		  
+	</insert>
+	
+
+<!-- 전체 게시글 리스트 출력 --> 
+	<select id="getAllDogBoardList" resultClass="dogBoardVO" parameterClass="String">
+		select dogboard_no, mem_no, dog_no, com_no, dogboard_title, dogboard_content, dogboard_date, dogboard_img
+		  from dogboard
+		  order by dogboard_no
+	</select>
+	
+	<!--  사용자리뷰조회 게시판  -->
+	<select id ="getMyBoardList" resultClass="dogBoardVO" parameterClass="dogBoardVO">	   
+        select a.dogboard_no, 
+         a.mem_id,
+         a.dogboard_title,
+         a.dogboard_content,
+         a.dogboard_date,
+         b.hotel_name
+    from dogboard a, hotel b
+   where a.hotel_name = b.hotel_name
+     and a.mem_no = #mem_no#
+	</select>
+	
+	
+	
+<!-- 게시글 확인창 --> 
+	<select id="selectDogBoard" resultClass="dogBoardVO" parameterClass="Integer">
+		select dogboard_no, mem_no, dog_no, com_no, dogboard_title, dogboard_content, dogboard_date, dogboard_img
+         from dogboard
+         where dogboard_no = #dogboard_no#
+	</select>
+	
+	
+<!-- 게시글 수정 -->
+<!--	
+	<update id="updateDogBoard" parameterClass="DogBoardVO">
+	
+  	select count(*) from member a where a.mem_no = b.mem_no
+
+		if(count! ==0)
+		then	
+		
+		UPDATE dogboard SET 
+               dogboard_title = #dogboard_title#,
+               dogboard_content = #dogboard_content# }
+    </update>
+	-->
+	
+<!-- 게시글 존재여부 확인 -->
+	<select id="serachDogBoard" parameterClass="String" resultClass="dogBoardVO">
+		select * from dogboard 
+		where dogboard_title like '%'||#dogboard_content#||'%'
+		or dogboard_content like '%'||#dogboard_content#||'%'
+	</select>
+	
+<!-- 게시글 삭제 -->
+   <update id="deleteDogBoard" parameterClass="dogBoardVO">
+      DELETE FROM dogboard 
+        WHERE dogboard_no=#dogboard_no# and mem_no=#mem_no#
+    </update> 
+   	
+ <!--	<select id= "countlabel" resultClass="DogBoardVO">
+	select count(*) from dogboard;
+	</select>  
+	 -->
+	
+	
+	
+</sqlMap>

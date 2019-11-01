@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Reviewboard">
+
+
+<!-- 게시글 작성 -->
+	<insert id="insertReBoard" parameterClass="ReviewBoardVO">
+		 insert into reviewboard(rebd_no,rebd_title,rebd_content,rebd_date,rebd_open,rebd_up,rebd_wrn_num,mem_id) 
+		      values((select nvl(max(rebd_no),0)+1 from reviewboard),#rebd_title#,#rebd_content#,sysdate,0,0,0,'wlsdnd0422')
+	</insert>
+	
+	
+<!-- 전체 게시글 리스트 출력 --> 
+	<select id="selectReBoardlist" resultClass="ReviewBoardVO">
+		select rebd_no,rebd_title,rebd_content,mem_id,rebd_date,rebd_open,rebd_up
+		  from reviewboard
+		  order by rebd_no
+	</select>
+	
+	
+<!-- 게시글 확인창 --> 
+	<select id="selectReBoardread" resultClass="ReviewBoardVO" parameterClass="ReviewBoardVO">
+		select rebd_no,rebd_title,rebd_constent,rebd_date,rebd_open,rebd_up,rebd_wrn_num,mem_id
+		  from reviewboard
+		 where rebo_no = #rebd_no#
+	</select>
+	
+	
+<!-- 게시글 수정 -->
+	<update id="updateReBoard" parameterClass="ReviewBoardVO">
+		UPDATE reviewboard SET 
+               rebd_title = #rebd_title#,
+               rebd_content = #rebd_content#
+      	WHERE  mem_id=#mem_id# and rebd_no=#rebd_no# 
+    </update>
+	
+	
+<!-- 게시글 존재여부 확인 -->
+	<select id="getReBoard" parameterClass="int" resultClass="ReviewBoardVO">
+		select * from reviewboard where mem_id = 'wlsdnd0422'
+	</select>
+	
+<!-- 게시글 삭제 -->
+   <update id="deleteReBoard" parameterClass="ReviewBoardVO">
+      DELETE FROM reviewboard 
+        WHERE rebd_no=#rebd_no# and mem_id=#mem_id#
+    </update> 
+   	
+	
+
+	
+	
+	
+</sqlMap>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+			PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+			"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+			
+<sqlMap namespace="check">
+
+	<!-- 사업자가 보는 자기 호텔 예약 목록 -->
+	<select id="getAllBookCheck" resultClass="reservCheckVO" parameterClass="reservCheckVO" >
+		SELECT  A.BOOK_CHECKIN, A.BOOK_DOG_CNT, A.BOOK_PRICE, A.BOOK_DATE, B.MEM_NAME, B.MEM_TEL, A.BOOK_STATE
+          FROM BOOK A, MEMBER B, HOTEL C
+         WHERE A.HOTEL_NO = C.HOTEL_NO
+		   AND A.MEM_NO = B.MEM_NO
+		   AND c.com_no = #com_no#
+	</select>
+	
+	<select id="getAllBookMonthCheck" resultClass="reservCheckVO" parameterClass="reservCheckVO" >
+		SELECT  A.BOOK_CHECKIN, A.BOOK_DOG_CNT, A.BOOK_PRICE, A.BOOK_DATE, B.MEM_NAME, B.MEM_TEL, A.BOOK_STATE
+          FROM BOOK A, MEMBER B, HOTEL C
+         WHERE 1=1
+		   AND A.HOTEL_NO = C.HOTEL_NO
+		   AND A.MEM_NO = B.MEM_NO
+		   AND C.COM_NO = #com_no#
+		   AND SUBSTR(A.BOOK_CHECKIN,1,7) = #book_checkin#
+	</select>
+	
+</sqlMap>			
